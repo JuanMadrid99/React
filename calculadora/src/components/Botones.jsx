@@ -1,15 +1,20 @@
 import React from "react";
 import '../stylesheets/Botones.css'
 
-function Boton(props) {
-  const esOperador = valor => {
-    return isNaN(valor) && (valor !== '.') && (valor !== '=')
-  };
+function Num(props) {
   return (
-    <button className={`boton-contenedor ${esOperador(props.children) ? 'operador' : ''}`.trimEnd()}
-      onClick={() => props.manejarClic(props.children)}>
+    <button className={`boton-contenedor`}
+      onClick={() => props.Click(props.children)}>
       {props.children}
     </button>
   );
 }
-export default Boton;
+function Sym(props) {
+  return (
+    <button className={`boton-contenedor operador`}
+      onClick={() => props.Click(props.children)}>
+      {props.children}
+    </button>
+  );
+}
+export {Num,Sym};

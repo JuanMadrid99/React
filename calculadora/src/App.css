@@ -16,21 +16,21 @@
 
 .logo-contenedor {
   width: 100%;
-  height: 50px;
-  margin: 8px;
+  height: 20px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   justify-content: center; 
 }
 .logo{
-  height: 100px;
+  height: 80px;
   opacity: 0.7;
   border-radius: 5px;
 }
 .calculadora{
 width: 300px;
-height: 330px;
-padding: 30px;
+height: 410px;
+padding: 20px;
 background-color: rgb(1, 1, 83);
 border-radius: 20px;
 border: 1px solid rgb(30, 30, 30);
