@@ -8,5 +8,12 @@ const BotonClear = (props)=>{
     </div>
   )
 };
+const Retroceder = (props)=>{
+  return(
+  <button className="boton-clear" onClick={props.Click}>
+    {props.children}
+  </button>    
+  )
+}
 
-export default BotonClear
+export {BotonClear,Retroceder};

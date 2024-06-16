@@ -1,46 +1,65 @@
 import logo from './img/pexels.jpg'
 import './App.css';
 import { Num, Sym } from './components/Botones.jsx'
+import { BotonClear, Retroceder } from './components/Clear.jsx'
 import Pantalla from './components/Pantalla.jsx'
-import Clear from './components/Clear.jsx'
 import { useState } from 'react';
 import { evaluate } from 'mathjs'
 
 function App() {
+  const [input, setInput] = useState('0'); //Valores
+  const [deci, setDeci] = useState(0); //decimal
+  const [oper, setOper] = useState(0); //operadores
 
-  const [input, setInput] = useState(0); //Valores
-  const [Op, addOP] = useState(0); //Operador
-  const [Dot, addDot] = useState(0); //Punto decimal
-
-  const addNum = (valor) => {
-    setInput(input + valor)
-    addOP(Op * 0)
+  const value = (valor) => {
+    if (!isNaN(valor)) { //ha ingresado un numero
+      setInput(input + valor) // anexamos el valor
+      setOper(0)
+    } else { //No ha ingresado un numero
+      if (valor === '.') { //ha ingresado un decimal
+        setDeci(deci + 1)
+        if (deci === 0) { //no habian decimales
+          setInput(input + valor) // anexamos el valor
+          setOper(oper + 1)
+          setDeci(deci + 1)
+        }
+      } else { //ha ingresado un operador
+        setDeci(0)//para poder operar valores con decimales tambien
+        if (oper === 0) {
+          setInput(input + valor) // anexamos el valor
+          setOper(oper + 1)
+        } else {
+          if (!input.endsWith('.')) {
+            const caden = input.slice(0, -1);// Toma toda la cadena menos el último carácter
+            const cadenaN = caden + valor;// Combina la cadena sin el último carácter con el nuevo valor 
+            setInput(cadenaN);
+          }
+        }
+      }
+    }
   };
-  const addSym = (valor) => {
-    if (Dot === 0) {
-      setInput(input + valor);
-      addOP(Op + 1)
-    }
 
-    if (Op === 0) {
-      setInput(input + valor);
-      addOP(Op + 1)
-    }
-    else {
-      const Old = input.slice(0, -1);// Toma toda la cadena menos el último carácter
-      const New = Old + valor;// Combina la cadena sin el último carácter con el nuevo valor
-      setInput(New);
-    }
-  };
   const calcularResu = () => {
     const Last = input.charAt(input.length - 1);// Toma el último carácter de la cadena 
-    if (input && !isNaN(Last)) { //evalua que el ultimo elemento sea un numero para realzia la operacion
-      setInput(evaluate(input));
-    }
-    else {
+    if (input && !isNaN(Last)) { //evalua que el ultimo elemento sea un numero para realizar la operacion
+      let result = evaluate(input).toString();// lo pasamos a texto ya que evaluate devuelve numero
+      if (!result.includes('.')) { // si no contiene decimal, reestablecemos su contador para poder poner mas
+        setDeci(0)
+      }
+      setInput(result);
+      setOper(0)
+    } else {
       alert('porfavor ingrese valores')
     }
-  }
+  };
+  const volver = () => {
+    const caden = input.slice(0, -1);// Toma toda la cadena menos el último carácter
+    if (input.length === 1) {
+      setInput('0')
+    } else {
+      setInput(caden)
+    }
+  };
 
   return (
     <div className="App">
@@ -49,13 +68,13 @@ function App() {
       </div>
       <div className='calculadora'>
         <Pantalla input={input}></Pantalla>
-        <div className='fila'><Num Click={addNum}>9</Num><Num Click={addNum}>8</Num><Num Click={addNum}>7</Num></div>
-        <div className='fila'><Num Click={addNum}>6</Num><Num Click={addNum}>5</Num><Num Click={addNum}>4</Num></div>
-        <div className='fila'><Num Click={addNum}>3</Num><Num Click={addNum}>2</Num><Num Click={addNum}>1</Num></div>
-        <div className='fila'><Num Click={addNum}>00</Num><Num Click={addNum}>0</Num><Sym Click={addSym}>.</Sym></div>
-        <div className='fila'><Sym Click={addSym}>+</Sym><Sym Click={addSym}>-</Sym><Sym Click={addSym}>*</Sym><Sym Click={addSym}>/</Sym></div>
-        <div className='fila'><button >Back</button><Sym Click={calcularResu}>=</Sym></div>
-        <div className='fila'><Clear Click={() => { setInput('0') }}>Clear</Clear></div>
+        <div className='fila'><Num Click={value}>9</Num><Num Click={value}>8</Num><Num Click={value}>7</Num></div>
+        <div className='fila'><Num Click={value}>6</Num><Num Click={value}>5</Num><Num Click={value}>4</Num></div>
+        <div className='fila'><Num Click={value}>3</Num><Num Click={value}>2</Num><Num Click={value}>1</Num></div>
+        <div className='fila'><Num Click={value}>00</Num><Num Click={value}>0</Num><Sym Click={value} >.</Sym></div>
+        <div className='fila'><Sym Click={value}>+</Sym><Sym Click={value}>-</Sym><Sym Click={value}>*</Sym><Sym Click={value}>/</Sym></div>
+        <div className='fila'><Retroceder Click={volver}>Back</Retroceder><Sym Click={calcularResu}>=</Sym></div>
+        <div className='fila'><BotonClear Click={() => { setInput('0') }}>Clear</BotonClear></div>
       </div>
     </div>
   );
