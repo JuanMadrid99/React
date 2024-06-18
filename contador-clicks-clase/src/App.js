@@ -5,8 +5,8 @@ import Boton from './components/button.jsx';
 import Contador from './components/contador.jsx'
 
 class App extends React.Component {
-  constructor() {
-    super() // es lo que permite heredar toda la funcionalidad de react.component
+  constructor() { //si tuviera props...constructor(props) y super(props)
+    super() // es lo que permite heredar toda la funcionalidad de react.component (Obligatorio) para el constructor
     this.state = { //objeto que contiene todas las propiedades que definen el estado del componente
       numClics: 0
     };
@@ -19,7 +19,7 @@ class App extends React.Component {
   reiniciarContador() {
     this.setState({ numClics: 0 })
   }
-  render() {
+  render() { // (obligatorio)
     return (
       <div className="App">
         <div className='logo-contenedor'>
